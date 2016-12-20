@@ -16,36 +16,38 @@ $.get("/apispecs.json", function(apidoc, status) {
         call.setAttribute('role', 'tabpanel');
         call.setAttribute('class', 'tab-pane col-md-10');
         var innerHTML = '';
-        innerHTML += '<p><H4>Request Headers</H4></p>';
-        innerHTML += '<table class="table table-bordered table-striped">';
-        innerHTML += '<tr><th>Key</th><th>Value</th></tr>';
-        for (var key in specs.Calls[specs.Calls.length - 1].RequestHeader) {
-            innerHTML += '<tr><td>' + key + '</td><td>  ' + specs.Calls[specs.Calls.length - 1].RequestHeader[key] + '</td></tr>';
-        }
-        innerHTML += '</table>';
-        if (specs.Calls[specs.Calls.length - 1].RequestUrlParams || specs.Calls[specs.Calls.length - 1].RequestUrlParams != "") {
-            innerHTML += '<p> <H4> Request URL params </H4> </p>';
-            innerHTML += '<pre class="prettyprint lang-json">' + specs.Calls[specs.Calls.length - 1].RequestUrlParams + '</pre><hr>';
-        }
-        if (specs.Calls[specs.Calls.length - 1].RequestBody || specs.Calls[specs.Calls.length - 1].RequestBody != "") {
-            innerHTML += '<p> <H4> Request Body </H4> </p>';
-            innerHTML += '<pre class="prettyprint lang-json">' + specs.Calls[specs.Calls.length - 1].RequestBody + '</pre><hr>';
-        }
-        innerHTML += '<p><h4> Response Code</h4></p>';
-        innerHTML += '<pre class="prettyprint lang-json">' + specs.Calls[specs.Calls.length - 1].ResponseCode + '</pre>';
-        if (Object.keys(specs.Calls[specs.Calls.length - 1].ResponseHeader).length > 0) {
-            innerHTML += '<p><h4> Response Headers</h4></p>';
+        specs.Calls.forEach(function(apicall, index) {
+            innerHTML += '<p><H4>Request Headers</H4></p>';
             innerHTML += '<table class="table table-bordered table-striped">';
             innerHTML += '<tr><th>Key</th><th>Value</th></tr>';
-            for (var key in specs.Calls[specs.Calls.length - 1].ResponseHeader) {
-                innerHTML += '<tr><td>' + key + '</td><td>  ' + specs.Calls[specs.Calls.length - 1].ResponseHeader[key] + '</td></tr>';
+            for (var key in apicall.RequestHeader) {
+                innerHTML += '<tr><td>' + key + '</td><td>  ' + apicall.RequestHeader[key] + '</td></tr>';
             }
             innerHTML += '</table>';
-        }
-        if (specs.Calls[specs.Calls.length - 1].ResponseBody != "") {
-            innerHTML += '<p> <H4> Response Body </H4> </p>';
-            innerHTML += '<pre class="prettyprint lang-json">' + specs.Calls[specs.Calls.length - 1].ResponseBody + '</pre><hr>';
-        }
+            if (apicall.RequestUrlParams || apicall.RequestUrlParams != "") {
+                innerHTML += '<p> <H4> Request URL params </H4> </p>';
+                innerHTML += '<pre class="prettyprint lang-json">' + apicall.RequestUrlParams + '</pre><hr>';
+            }
+            if (apicall.RequestBody || apicall.RequestBody != "") {
+                innerHTML += '<p> <H4> Request Body </H4> </p>';
+                innerHTML += '<pre class="prettyprint lang-json">' + apicall.RequestBody + '</pre><hr>';
+            }
+            innerHTML += '<p><h4> Response Code</h4></p>';
+            innerHTML += '<pre class="prettyprint lang-json">' + apicall.ResponseCode + '</pre>';
+            if (Object.keys(apicall.ResponseHeader).length > 0) {
+                innerHTML += '<p><h4> Response Headers</h4></p>';
+                innerHTML += '<table class="table table-bordered table-striped">';
+                innerHTML += '<tr><th>Key</th><th>Value</th></tr>';
+                for (var key in apicall.ResponseHeader) {
+                    innerHTML += '<tr><td>' + key + '</td><td>  ' + apicall.ResponseHeader[key] + '</td></tr>';
+                }
+                innerHTML += '</table>';
+            }
+            if (apicall.ResponseBody != "") {
+                innerHTML += '<p> <H4> Response Body </H4> </p>';
+                innerHTML += '<pre class="prettyprint lang-json">' + apicall.ResponseBody + '</pre><hr>';
+            }
+        });
         call.innerHTML = innerHTML;
         payload.appendChild(call);
     });
